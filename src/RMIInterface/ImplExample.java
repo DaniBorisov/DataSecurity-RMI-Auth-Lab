@@ -6,7 +6,7 @@ public  class ImplExample implements rmiInterface {
 
 
     @Override
-    public String test1() throws RemoteException {
-        return "Hello there";
+    public String test1(String name) throws RemoteException {
+        return "Hello " + name;
     }
 }
