@@ -1,80 +1,71 @@
 package Server;
 
-import RMIInterface.ImplExample;
+import RMIInterface.PrintingService;
 import RMIInterface.rmiInterface;
 
 import javax.net.ssl.*;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class SSLServer extends ImplExample {
+public class SSLServer extends PrintingService {
+
+    private static int Port = 5098;
+    private static int SSlSocketPort = 5051;
+
+    protected SSLServer() throws RemoteException {
+        super();
+    }
 
 
     public static void main(String[] args) {
 
         System.out.println("Server Starting... beep boop");
-        SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 
         try {
-//simple connection
-            ImplExample obj = new ImplExample();
-            rmiInterface stub = (rmiInterface) UnicastRemoteObject.exportObject(obj,5099);
 
 
-            Registry registry = LocateRegistry.createRegistry(5099);
-
-            registry.rebind("Hello" , stub);
+            Registry registry = LocateRegistry.createRegistry(Port);
+            PrintingService printService = new PrintingService();
+            registry.rebind("service",printService);
 
             System.err.println("Server ready");
 
-//            socket connection
-//            SSLContext ctx = SSLContext.getInstance("TLSv1.2");
+
+            //        SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+//        rmiInterface stub = (rmiInterface) UnicastRemoteObject.exportObject(printService,Port);
 
 
-
-            SSLServerSocket sSocket = (SSLServerSocket) factory.createServerSocket(5050);
-
-            sSocket.setNeedClientAuth(false);
-
-            sSocket.setEnabledCipherSuites(new String[]{
-                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
-                    "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
-                    "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
-                    "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
-                    "TLS_ECDH_RSA_WITH_RC4_128_SHA",
-                    "TLS_ECDH_anon_WITH_RC4_128_SHA"});
-            sSocket.setEnabledProtocols(new String[] {"TLSv1.2"});
-
-
-
-            SSLSocket socket = (SSLSocket) sSocket.accept();
-
-//            while (true)
-//            {
-//                System.out.println("dsaads");
 //
-//                try(SSLSocket socket = (SSLSocket) sSocket.accept()) {
-//                    PrintWriter print = new PrintWriter(socket.getOutputStream(),true);
-//                    print.println("Something happened ??");
+//            SSLServerSocket sSocket = (SSLServerSocket) factory.createServerSocket(SSlSocketPort);
 //
-//                }
-//            }
-
-            SSLParameters sslp = socket.getSSLParameters();
-            String[] ServerAPs = {"Hello"};
-            sslp.setApplicationProtocols(ServerAPs);
-
-
-            socket.startHandshake();
-
+//            sSocket.setNeedClientAuth(true);
+//
+//            sSocket.setEnabledCipherSuites(new String[]{
+//                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+//                    "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
+//                    "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
+//                    "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
+//                    "TLS_ECDH_RSA_WITH_RC4_128_SHA",
+//                    "TLS_ECDH_anon_WITH_RC4_128_SHA"});
+//
+//            sSocket.setEnabledProtocols(new String[] {"TLSv1.2"});
+//
+//            SSLSocket socket = (SSLSocket) sSocket.accept();
+//
+//            SSLParameters sslp = socket.getSSLParameters();
+//            String[] ServerAPs = {"Hello"};
+//            sslp.setApplicationProtocols(ServerAPs);
+//
+//
+////            socket.startHandshake();
+//
 //            socket.setSSLParameters(sslp);
 //            String somthing = socket.getApplicationProtocol();
-//            System.out.println(" printing Server side AP" + somthing);
+//            System.out.println(" printing Server side AP  " + somthing);
 //
 //            InputStream IP = socket.getInputStream();
 //            OutputStream OP = socket.getOutputStream();
@@ -85,47 +76,36 @@ public class SSLServer extends ImplExample {
 //            OP.flush();
 //            socket.close();
 //            sSocket.close();
-
-
         }
         catch (Exception e){
             System.out.println("Server e" + e.toString());
             e.printStackTrace();
         }
 
-
-
-//
-//        SSLContext ctx = SSLContext.getInstance("TLS");
-//
-////        KeyStore
-//
-//        KeyStore keyKS = KeyStore.getInstance("PKCS12");
-//        keyKS.
-//
-//        // Generate KeyManager
-//        KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
-//        kmf.init(keyKS, "password".toCharArray());
-//        KeyManager[] kms = kmf.getKeyManagers();
-//
-//        // Code to substitute MyX509ExtendedKeyManager
-//        if (!(kms[0] instanceof X509ExtendedKeyManager)) {
-//            throw new Exception("kms[0] not X509ExtendedKeyManager");
-//        }
-//
-//        // Create a new KeyManager array and set the first index
-//        // of the array to an instance of MyX509ExtendedKeyManager.
-//        // Notice how creating this object is done by passing in the
-//        // existing default X509ExtendedKeyManager
-//        kms = new KeyManager[] {
-//                new MyX509ExtendedKeyManager((X509ExtendedKeyManager) kms[0])};
-//
-//        // Initialize SSLContext using the new KeyManager
-//        ctx.init(kms, null, null);
-
-
-
     }
 
 
+//    private void init() {
+//        clients.put("user1", 1234);
+//        clients.put("admin", "admin");
+//    }
 }
+
+//        finally {
+//
+//            System.err.println("Server ready");
+//            //simple connection
+//
+//            registry.rebind("Hello" , stub);
+//
+//            registry.rebind("Start" , stub);
+//            registry.rebind("Stop" , stub);
+//            registry.rebind("Queue" , stub);
+//            registry.rebind("TopQueue" , stub);
+//            registry.rebind("Print" , stub);
+//            registry.rebind("Restart" , stub);
+//            registry.rebind("Status" , stub);
+//            registry.rebind("ReadConfig" , stub);
+//            registry.rebind("SetConfig" , stub);
+//
+//        }
