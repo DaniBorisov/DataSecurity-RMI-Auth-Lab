@@ -6,13 +6,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.security.KeyFactory;
 import java.security.KeyStore;
+import java.util.Scanner;
 
 
 public class SSLClient {
@@ -23,7 +22,6 @@ public class SSLClient {
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
 
         System.out.println("Client started");
-
 
         try{
             Registry registry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(),Port);

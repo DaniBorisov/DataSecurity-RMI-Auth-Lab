@@ -10,6 +10,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
 
 public class SSLServer extends PrintingService {
 
@@ -21,8 +26,7 @@ public class SSLServer extends PrintingService {
     }
 
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws RemoteException {
         System.out.println("Server Starting... beep boop");
 
         try {
