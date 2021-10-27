@@ -78,8 +78,6 @@ public class SSLClient {
                         System.out.print("Which printer you want to use? ");
                         printer  = scanner.nextLine();  // Read user input
                         System.out.println(service.print(file, printer, username));
-                        shouldRepeat = false;
-
                         break;
                     case "queue":
                         System.out.print("Which printer you want to check? ");
@@ -121,7 +119,6 @@ public class SSLClient {
                         System.out.println(service.setConfig(parameter, value));
                         break;
                     default:
-                        shouldRepeat = true;
                         System.out.println("Command unclear - Try again.");
                 }
             }
