@@ -54,8 +54,8 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
         System.out.println("The queue list of " + printer + ": ");
         String queueString = "";
 
-        for (Job j : jobs) {
-            queueString += "\n" +"Job #"+j + " - Filename: "+ j.getFileName() + " - ID: " + j.getID();
+        for (int i = 0 ; i <jobs.size() ; i++) {
+            queueString += "\n" +"Job #"+ i + " - Filename: "+ jobs.get(i).getFileName() + " - ID: " + jobs.get(i).getID();
         };
         System.out.println(queueString);
         return queueString;
