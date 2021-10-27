@@ -77,7 +77,7 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
     }
 
     @Override
-    public String stop()  throws RemoteException {
+    public String stop() throws RemoteException {
         return  "Stopping the print server";
     }
 
@@ -93,7 +93,7 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
 
     @Override
     public String readConfig(String parameter) throws RemoteException {
-        return  "Reading config of " + parameter;
+        return  "Reading config of " +"\0"+ parameter;
 
     }
 

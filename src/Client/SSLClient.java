@@ -1,7 +1,7 @@
 package Client;
 
+import Database.Job;
 import RMIInterface.rmiInterface;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -13,9 +13,7 @@ import java.rmi.registry.Registry;
 import java.security.KeyStore;
 import java.util.Scanner;
 
-
 public class SSLClient {
-
     private static int Port = 5098;
     private static int SSlSocketPort = 5051;
     private static Scanner scanner = new Scanner(System.in);  // Create a Scanner object
@@ -23,8 +21,7 @@ public class SSLClient {
     private static String pass = "";
 
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
-
-        System.out.println("Client started");
+        System.err.println("Client started");
 
         try{
             Registry registry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), Port);
@@ -80,7 +77,7 @@ public class SSLClient {
 
                         break;
                     case "print":
-                        System.out.println("What file you want to print? ");
+                        System.out.print("What file you want to print? ");
                         String file = scanner.nextLine();  // Read user input
                         System.out.print("Which printer you want to use? ");
                         printer  = scanner.nextLine();  // Read user input
@@ -141,26 +138,6 @@ public class SSLClient {
                 }
             } while (true);
 
-
-
-
-//            socket connection
-//
-//            SSLSocket socket = (SSLSocket) factory.createSocket(InetAddress.getLocalHost().getHostAddress(), SSlSocketPort);
-//
-//            socket.setEnabledCipherSuites(new String[]{
-//                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
-//                    "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
-//                    "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
-//                    "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
-//                    "TLS_ECDH_RSA_WITH_RC4_128_SHA",
-//                    "TLS_ECDH_anon_WITH_RC4_128_SHA"});
-//
-//            socket.setEnabledProtocols(new String[] {"TLSv1.2"});
-//
-//            SSLContext ctx = SSLContext.getInstance("TLSv1.2");
-//
-//
 
 //            KeyStore ks = KeyStore.getInstance("JKS");
 //
