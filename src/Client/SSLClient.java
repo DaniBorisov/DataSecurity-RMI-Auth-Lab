@@ -65,6 +65,20 @@ public class SSLClient {
                 String printer = "";
 
                 switch (command) {
+                    case  "help":
+                        System.out.println("########################################\n"+
+                                "print - prints file filename on a specified printer\n" +
+                                "queue - lists the print queue for a given printer\n" +
+                                "topQueue - moves job to the top of the queue\n" +
+                                "start - starts the print server\n" +
+                                "stop - stops the print server\n" +
+                                "restart - stops the print server, clears the print queue and starts the print server again\n" +
+                                "status - prints the status of a printer\n" +
+                                "readConfig - prints the value of the parameter\n" +
+                                "setConfig - sets the parameter to value\n" +
+                                "########################################");
+
+                        break;
                     case "print":
                         System.out.println("What file you want to print? ");
                         String file = scanner.nextLine();  // Read user input
