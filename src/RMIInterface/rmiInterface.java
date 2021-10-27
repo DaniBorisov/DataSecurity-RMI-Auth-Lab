@@ -5,10 +5,8 @@ import java.rmi.RemoteException;
 
 public interface rmiInterface extends Remote {
 
-    String test1(String name) throws RemoteException;
-
     String LogIn(String name, String password) throws RemoteException;
-    String print(String filename, String printer) throws RemoteException;   // prints file filename on the specified printer
+    String print(String filename, String printer, String username) throws RemoteException;   // prints file filename on the specified printer
     String queue(String printer) throws RemoteException;   // lists the print queue for a given printer on the user's display in lines of the form <job number>   <file name>
     String topQueue(String printer, int job) throws RemoteException;   // moves job to the top of the queue
     String start() throws RemoteException;   // starts the print server

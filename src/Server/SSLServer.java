@@ -1,5 +1,6 @@
 package Server;
 
+import Database.Database;
 import RMIInterface.PrintingService;
 import RMIInterface.rmiInterface;
 
@@ -24,6 +25,7 @@ public class SSLServer extends PrintingService {
     protected SSLServer() throws RemoteException {
         super();
     }
+
 
 
     public static void main(String[] args) throws RemoteException {

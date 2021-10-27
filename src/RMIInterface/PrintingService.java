@@ -1,51 +1,79 @@
 package RMIInterface;
 
+import Database.*;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+
+
 
 public  class PrintingService extends UnicastRemoteObject implements rmiInterface  {
     private TreeMap clients = new TreeMap<String,String>();
+    private List<Printer> printers = new ArrayList<>();
+    private Database dbase = new Database();
 
     public PrintingService() throws RemoteException {
         super();
-    }
-
-    @Override
-    public String test1(String name) throws RemoteException {
-        return "Hello " + name;
+        initPrinter();
     }
 
     @Override
     public String LogIn(String name, String password) throws RemoteException {
-        init();
-        String response = search(name,password);
-
+        initUSer();
+        String response = userSearch(name,password);
         return response;
     }
 
 
     @Override
-    public String print(String filename, String printer) throws RemoteException {
+    public String print(String filename, String printer,String username) throws RemoteException {
+        initPrinter();
+        Job job = new Job(filename,username);
+        for (Printer p : printers)
+        {
+            if(printer.matches(p.getPrinterName())) {
+                p.PutJobInPrinter(job);
+            }
+        }
+        System.out.println("File " + filename + " added for printing at printer " + printer);
         return  "File " + filename + " started printing at printer " + printer;
     }
 
     @Override
     public String queue(String printer)  throws RemoteException {
-        return  "The queue list of printer " + printer;
+        List<Job> jobs = new  ArrayList<>();
+        for (Printer p : printers)
+        {
+            if(printer.matches(p.getPrinterName())) {
+                jobs = p.getJobsInQueue();
+            }
+        }
+        System.out.println("The queue list of " + printer + ": ");
+        String queueString = "";
+
+        for (Job j : jobs) {
+            queueString += "\n" +"Job #"+j + " - Filename: "+ j.getFileName() + " - ID: " + j.getID();
+        };
+        System.out.println(queueString);
+        return queueString;
     }
 
     @Override
     public String topQueue(String printer, int job)  throws RemoteException {
+        for (Printer p : printers)
+        {
+            if(printer.matches(p.getPrinterName()))
+            {
+               p.moveToTop(job);
+            }
+        }
         return  "Job " + job + "is moved to the top of the list for printer" + printer;
     }
 
     @Override
-    public String start()  throws RemoteException{
-        return  "Printing Started" ;
+    public String start() throws RemoteException{
+        return  "Print Server Started" ;
     }
 
     @Override
@@ -71,12 +99,11 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
 
     @Override
     public String setConfig(String parameter, String value)   throws RemoteException{
-        parameter = value;
         return  "the following parameter " + parameter +" is set to " + value;
     }
 
 
-    private String search(String username, String password)
+    private String userSearch(String username, String password)
     {
         String response = "";
 
@@ -93,7 +120,7 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
             if(username.equals(user)){
                 flag = true;
                 if(password.equals(pass)){
-                    response = "LOGIN_SUCCESFUL";
+                    response = "LOGIN_SUCCESSFUL";
                 }else{
                     response = "PASSWORD_INCORRECT";
                 }
@@ -107,8 +134,17 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
         return response;
     }
 
-    private void init() {
-        clients.put("user1", 1234567);
-        clients.put("admin", "admin");
+    private void initUSer() {
+        for (Users user :  dbase.getUserList())
+        {
+            clients.put(user.getUsername(), user.getPassword());
+
+        }
+    }
+    private void initPrinter() {
+        for (Printer printer :  dbase.getPrinterList())
+        {
+            printers.add(printer);
+        }
     }
 }
