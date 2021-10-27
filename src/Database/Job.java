@@ -7,13 +7,13 @@ public class Job {
 
         private String Username;
         private String FileName;
-        private int ID = 000;
+        private int ID;
 
-    public Job (String filename, String username)
+    public Job (String filename, String username,int ID)
         {
             this.FileName = filename;
             this.Username = username;
-            this.ID += 1;
+            this.ID = ID;
         }
 
         public String getUsername()

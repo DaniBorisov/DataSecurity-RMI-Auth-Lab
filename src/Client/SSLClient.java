@@ -28,7 +28,7 @@ public class SSLClient {
             rmiInterface service = (rmiInterface) registry.lookup("service");
 
             boolean loggedIn = false;
-            while (loggedIn == false) {
+            while (loggedIn == false ) {
                 try {
                     System.out.print("Enter username: ");
                     username = scanner.nextLine();  // Read user input
@@ -53,14 +53,11 @@ public class SSLClient {
                 }
             }
             boolean isRunning = true;
-            boolean shouldRepeat = true;
-           // while (shouldRepeat == true) {
-            do {
+            while (isRunning == true) {
                 System.out.println("Enter command - enter 'help' for command list.");
                 String command = scanner.nextLine();  // Read user input
                 System.out.println("Command is: " + command);  // Output user input
                 String printer = "";
-
                 switch (command) {
                     case  "help":
                         System.out.println("########################################\n"+
@@ -74,7 +71,6 @@ public class SSLClient {
                                 "readConfig - prints the value of the parameter\n" +
                                 "setConfig - sets the parameter to value\n" +
                                 "########################################");
-
                         break;
                     case "print":
                         System.out.print("What file you want to print? ");
@@ -88,8 +84,7 @@ public class SSLClient {
                     case "queue":
                         System.out.print("Which printer you want to check? ");
                         printer = scanner.nextLine();  // Read user input
-                        System.out.println();service.queue(printer);
-                        shouldRepeat = false;
+                        System.out.println(service.queue(printer));
                         break;
                     case "topQueue":
                         System.out.print("Which printer's queue you want to modify? ");
@@ -97,32 +92,26 @@ public class SSLClient {
                         System.out.print("Which job you want? ");
                         int job = scanner.nextInt();
                         System.out.println(service.topQueue(printer, job));
-                        shouldRepeat = false;
                         break;
                     case "start":
                         System.out.println(service.start());
-                        shouldRepeat = false;
                         break;
                     case "stop":
                         System.out.println(service.stop());
-                        shouldRepeat = false;
                         isRunning = false;
                         break;
                     case "restart":
                         System.out.println(service.restart());
-                        shouldRepeat = false;
                         break;
                     case "status":
                         System.out.print("Which printer's status you want to know? ");
                         printer = scanner.nextLine();  // Read user input
                         System.out.println(service.status(printer));
-                        shouldRepeat = false;
                         break;
                     case "readConfig":
                         System.out.print("Which parameter's value you want to see? ");
                         String parameter = scanner.nextLine();  // Read user input
                         System.out.println(service.readConfig(parameter));
-                        shouldRepeat = false;
                         break;
                     case "setConfig":
                         System.out.print("What param you want to set? ");
@@ -130,61 +119,16 @@ public class SSLClient {
                         System.out.print("To what value you want to set it? ");
                         String value = scanner.nextLine();
                         System.out.println(service.setConfig(parameter, value));
-                        shouldRepeat = false;
                         break;
                     default:
                         shouldRepeat = true;
                         System.out.println("Command unclear - Try again.");
                 }
-            } while (true);
-
-
-//            KeyStore ks = KeyStore.getInstance("JKS");
-//
-//            String KeyPas = "1234567";
-//
-//            char[] password = pass.toCharArray();
-//            System.out.println(password);
-//
-//            String path = "C:\\Users\\Dani\\.keystore";
-//            InputStream ksIs = new FileInputStream(path);
-//
-//            ks.load(ksIs, "password".toCharArray());
-//
-//            System.out.println(ks.getKey("ca",password ));
-
+            }
         }catch (Exception e){
             System.err.println("Client exception" + e.toString());
             e.printStackTrace();
         }
-
-//      public void startSession (){
-//            boolean loggedIn = false;
-//            while (loggedIn == false) {
-//                try {
-//                    System.out.println("Enter username:  ");
-//                    username = scanner.nextLine();  // Read user input
-//                    System.out.println("Enter pass ");
-//                    pass = scanner.nextLine();  // Read user input
-//
-//                    String response = service.LogIn(username, pass);
-//
-//                    if (response.matches("LOGIN_SUCCESSFUL")) {
-//                        loggedIn = true;
-//                        System.out.println("response from server is: " + response);  // Output user input
-//                        System.out.println("Printers names: p1 -- p2 -- p3.");
-//                    }
-//                    else {
-//                        loggedIn = false;
-//                        System.out.println("response from server is: " + response);  // Output user input
-//                    }
-//
-//                } catch (Exception e) {
-//                    System.err.println("Client exception" + e.toString());
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
     }
 
 

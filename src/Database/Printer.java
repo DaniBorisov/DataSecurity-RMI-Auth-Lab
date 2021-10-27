@@ -48,8 +48,14 @@ public class Printer {
             {
                 removeJobInPrinter(j);
                 PutJobInPrinter(j);
+
             }
         }
+    }
+
+    public void clearQueue()
+    {
+        q.clear();
     }
 
 }

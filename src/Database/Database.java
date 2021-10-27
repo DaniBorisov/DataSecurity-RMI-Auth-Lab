@@ -13,9 +13,6 @@ public class Database {
     Printer printer2 = new Printer("p2");
     Printer printer3 = new Printer("p3");
 
-
-
-
     public ArrayList<Users> getUserList()
     {
         ArrayList<Users> users = new ArrayList<>();

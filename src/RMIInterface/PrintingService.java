@@ -12,9 +12,11 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
     private TreeMap clients = new TreeMap<String,String>();
     private List<Printer> printers = new ArrayList<>();
     private Database dbase = new Database();
+    int jobCounter = 1;
 
     public PrintingService() throws RemoteException {
         super();
+        System.out.println("Printing Server started");
         initPrinter();
     }
 
@@ -28,12 +30,12 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
 
     @Override
     public String print(String filename, String printer,String username) throws RemoteException {
-        initPrinter();
-        Job job = new Job(filename,username);
+        Job job = new Job(filename,username,jobCounter);
         for (Printer p : printers)
         {
             if(printer.matches(p.getPrinterName())) {
                 p.PutJobInPrinter(job);
+                jobCounter++;
             }
         }
         System.out.println("File " + filename + " added for printing at printer " + printer);
@@ -82,7 +84,12 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
     }
 
     @Override
-    public String restart()  throws RemoteException {
+    public String restart()  throws RemoteException
+    {
+        for (Printer p : printers)
+        {
+            p.clearQueue();
+        }
         return "Restarting the print server" ;
     }
 
