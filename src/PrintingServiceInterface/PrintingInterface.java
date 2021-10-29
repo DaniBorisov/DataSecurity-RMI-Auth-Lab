@@ -1,9 +1,9 @@
-package RMIInterface;
+package PrintingServiceInterface;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface rmiInterface extends Remote {
+public interface PrintingInterface extends Remote {
 
     String LogIn(String name, String password) throws RemoteException;
     String print(String filename, String printer, String username) throws RemoteException;   // prints file filename on the specified printer

@@ -1,20 +1,10 @@
 package Server;
 
-import Database.Database;
-import RMIInterface.PrintingService;
-import RMIInterface.rmiInterface;
+import PrintingServiceInterface.PrintingService;
 
-import javax.net.ssl.*;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 public class SSLServer extends PrintingService {
 

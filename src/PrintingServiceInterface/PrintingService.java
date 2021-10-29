@@ -1,4 +1,4 @@
-package RMIInterface;
+package PrintingServiceInterface;
 
 import Database.*;
 
@@ -8,8 +8,8 @@ import java.util.*;
 
 
 
-public  class PrintingService extends UnicastRemoteObject implements rmiInterface  {
-    private TreeMap clients = new TreeMap<String,String>();
+public  class PrintingService extends UnicastRemoteObject implements PrintingInterface {
+    private TreeMap Users = new TreeMap<String,String>();
     private List<Printer> printers = new ArrayList<>();
     private Database dbase = new Database();
     int jobCounter = 1;
@@ -114,9 +114,9 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
     {
         String response = "";
 
-        Set set = clients.entrySet();
+        Set set = Users.entrySet();
         Iterator itr = set.iterator();
-        boolean flag = false;
+        boolean LoggedIn = false;
 
         while(itr.hasNext()){
             response = "";
@@ -125,7 +125,7 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
             String pass = entry.getValue().toString();
 
             if(username.equals(user)){
-                flag = true;
+                LoggedIn = true;
                 if(password.equals(pass)){
                     response = "LOGIN_SUCCESSFUL";
                 }else{
@@ -134,8 +134,8 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
                 break;
             }
         }
-        if(! flag){
-            response = "USER_NOT_EXISTS";
+        if(! LoggedIn){
+            response = "USER_DOES_NOT_EXISTS";
         }
 
         return response;
@@ -144,7 +144,7 @@ public  class PrintingService extends UnicastRemoteObject implements rmiInterfac
     private void initUSer() {
         for (Users user :  dbase.getUserList())
         {
-            clients.put(user.getUsername(), user.getPassword());
+            Users.put(user.getUsername(), user.getPassword());
 
         }
     }

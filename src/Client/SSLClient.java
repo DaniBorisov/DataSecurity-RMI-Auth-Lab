@@ -1,16 +1,12 @@
 package Client;
 
-import Database.Job;
-import RMIInterface.rmiInterface;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import PrintingServiceInterface.PrintingInterface;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.security.KeyStore;
 import java.util.Scanner;
 
 public class SSLClient {
@@ -25,7 +21,7 @@ public class SSLClient {
 
         try{
             Registry registry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), Port);
-            rmiInterface service = (rmiInterface) registry.lookup("service");
+            PrintingInterface service = (PrintingInterface) registry.lookup("service");
 
             boolean loggedIn = false;
             while (loggedIn == false ) {
@@ -53,7 +49,7 @@ public class SSLClient {
                 }
             }
             boolean isRunning = true;
-            while (isRunning == true) {
+            while (isRunning == true && loggedIn == true) {
                 System.out.println("Enter command - enter 'help' for command list.");
                 String command = scanner.nextLine();  // Read user input
                 System.out.println("Command is: " + command);  // Output user input
