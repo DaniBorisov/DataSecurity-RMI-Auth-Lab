@@ -1,7 +1,5 @@
 package Database;
 
-import java.util.Random;
-
 public class Job {
 
 

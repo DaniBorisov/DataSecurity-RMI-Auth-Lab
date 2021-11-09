@@ -21,133 +21,121 @@ public  class PrintingService extends UnicastRemoteObject implements PrintingInt
     }
 
     @Override
-    public String LogIn(String name, String password) throws RemoteException {
-        initUSer();
-        String response = userSearch(name,password);
-        return response;
-    }
-
-
-    @Override
     public String print(String filename, String printer,String username) throws RemoteException {
-        Job job = new Job(filename,username,jobCounter);
-        for (Printer p : printers)
+
+        if(dbase.getCommands(username, "print"))
         {
-            if(printer.matches(p.getPrinterName())) {
-                p.PutJobInPrinter(job);
-                jobCounter++;
-            }
-        }
-        System.out.println("File " + filename + " added for printing at printer " + printer);
-        return  "File " + filename + " started printing at printer " + printer;
-    }
-
-    @Override
-    public String queue(String printer)  throws RemoteException {
-        List<Job> jobs = new  ArrayList<>();
-        for (Printer p : printers)
-        {
-            if(printer.matches(p.getPrinterName())) {
-                jobs = p.getJobsInQueue();
-            }
-        }
-        System.out.println("The queue list of " + printer + ": ");
-        String queueString = "";
-
-        for (int i = 0 ; i <jobs.size() ; i++) {
-            queueString += "\n" +"Job #"+ i + " - Filename: "+ jobs.get(i).getFileName() + " - ID: " + jobs.get(i).getID();
-        };
-        System.out.println(queueString);
-        return queueString;
-    }
-
-    @Override
-    public String topQueue(String printer, int job)  throws RemoteException {
-        for (Printer p : printers)
-        {
-            if(printer.matches(p.getPrinterName()))
-            {
-               p.moveToTop(job);
-            }
-        }
-        return  "Job " + job + "is moved to the top of the list for printer" + printer;
-    }
-
-    @Override
-    public String start() throws RemoteException{
-        return  "Print Server Started" ;
-    }
-
-    @Override
-    public String stop() throws RemoteException {
-        return  "Stopping the print server";
-    }
-
-    @Override
-    public String restart()  throws RemoteException
-    {
-        for (Printer p : printers)
-        {
-            p.clearQueue();
-        }
-        return "Restarting the print server" ;
-    }
-
-    @Override
-    public String status(String printer)  throws RemoteException {
-        return  "Status of printer " + printer;
-    }
-
-    @Override
-    public String readConfig(String parameter) throws RemoteException {
-        return  "Reading config of " +"\0"+ parameter;
-
-    }
-
-    @Override
-    public String setConfig(String parameter, String value)   throws RemoteException{
-        return  "the following parameter " + parameter +" is set to " + value;
-    }
-
-
-    private String userSearch(String username, String password)
-    {
-        String response = "";
-
-        Set set = Users.entrySet();
-        Iterator itr = set.iterator();
-        boolean LoggedIn = false;
-
-        while(itr.hasNext()){
-            response = "";
-            Map.Entry entry = (Map.Entry) itr.next();
-            String user = entry.getKey().toString();
-            String pass = entry.getValue().toString();
-
-            if(username.equals(user)){
-                LoggedIn = true;
-                if(password.equals(pass)){
-                    response = "LOGIN_SUCCESSFUL";
-                }else{
-                    response = "PASSWORD_INCORRECT";
+            Job job = new Job(filename, username, jobCounter);
+            for (Printer p : printers) {
+                if (printer.matches(p.getPrinterName())) {
+                    p.PutJobInPrinter(job);
+                    jobCounter++;
                 }
-                break;
             }
+            System.out.println("File: " + filename + " , added for printing at printer " + printer + " by user " + username);
+            return "File " + filename + " started printing at printer " + printer;
         }
-        if(! LoggedIn){
-            response = "USER_DOES_NOT_EXISTS";
-        }
-
-        return response;
-    }
-
-    private void initUSer() {
-        for (Users user :  dbase.getUserList())
-        {
-            Users.put(user.getUsername(), user.getPassword());
-
+        else {
+            return "Permission Denied";
         }
     }
+
+    @Override
+    public String queue(String printer,String username)  throws RemoteException {
+        if(dbase.getCommands(username, "queue")) {
+            List<Job> jobs = new ArrayList<>();
+            for (Printer p : printers) {
+                if (printer.matches(p.getPrinterName())) {
+                    jobs = p.getJobsInQueue();
+                }
+            }
+            System.out.println("The queue list of " + printer + ": ");
+            String queueString = "";
+
+            for (int i = 0; i < jobs.size(); i++) {
+                queueString += "\n" + "Job #" + i + " - Filename: " + jobs.get(i).getFileName() + " - ID: " + jobs.get(i).getID();
+            }
+            ;
+            System.out.println(queueString);
+            return queueString;
+        }else {
+            return "Permission Denied";
+        }
+    }
+
+    @Override
+    public String topQueue(String printer, int job,String username)  throws RemoteException {
+        if(dbase.getCommands(username, "topQueue")) {
+            for (Printer p : printers) {
+                if (printer.matches(p.getPrinterName())) {
+                    p.moveToTop(job);
+                }
+            }
+            return "Job " + job + "is moved to the top of the list for printer" + printer;
+        }else {
+            return "Permission Denied";
+        }
+
+    }
+
+    @Override
+    public String start(String username) throws RemoteException{
+        if(dbase.getCommands(username, "start")) {
+            return "Print Server Started";
+        }else {
+            return "Permission Denied";
+        }
+    }
+
+    @Override
+    public String stop(String username) throws RemoteException {
+        if(dbase.getCommands(username, "stop")) {
+            return  "Stopping the print server";
+        }else {
+            return "Permission Denied";
+        }
+    }
+
+    @Override
+    public String restart(String username)  throws RemoteException
+    {
+        if(dbase.getCommands(username, "restart")) {
+            for (Printer p : printers) {
+                p.clearQueue();
+            }
+            return "Restarting the print server";
+        }else {
+                return "Permission Denied";
+            }
+    }
+
+    @Override
+    public String status(String printer, String username)  throws RemoteException {
+        if(dbase.getCommands(username, "status")) {
+            return  "Status of printer " + printer;
+        }else {
+            return "Permission Denied";
+        }
+    }
+
+    @Override
+    public String readConfig(String parameter, String username) throws RemoteException {
+        if(dbase.getCommands(username, "readConfig")) {
+            return  "Reading config of " +"\0"+ parameter;
+        }else {
+            return "Permission Denied";
+        }
+    }
+
+    @Override
+    public String setConfig(String parameter, String value, String username)   throws RemoteException{
+        if(dbase.getCommands(username, "setConfig")) {
+            return  "the following parameter " + parameter +" is set to " + value;
+        }else {
+            return "Permission Denied";
+        }
+    }
+
     private void initPrinter() {
         for (Printer printer :  dbase.getPrinterList())
         {
