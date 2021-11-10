@@ -1,0 +1,85 @@
+[
+  {
+    "user": {
+    "username":"alice",
+    "password":"522b276a356bdf39013dfabea2cd43e141ecc9e8",
+    "commands":[
+      "print",
+      "queue",
+      "topQueue",
+      "start",
+      "stop",
+      "restart",
+      "status",
+      "readConfig",
+      "setConfing"
+      ]
+    }
+  },
+  {
+    "user": {
+    "username": "bob",
+    "password": "48181acd22b3edaebc8a447868a7df7ce629920a",
+    "commands": [
+      "start",
+      "stop",
+      "restart",
+      "status",
+      "readConfig",
+      "setConfing"
+    ]
+  }
+  },
+  {
+    "user": {
+    "username": "cecilia",
+    "password": "6e4ca0dced8ff091780a3f13375642645960e0b6",
+    "commands": [
+      "print",
+      "queue",
+      "topQueue",
+      "restart"
+    ]
+  }
+  },
+  {
+    "user": {
+    "username": "fred",
+    "password": "31017a722665e4afce586950f42944a6d331dabf",
+    "commands": [
+      "print",
+      "queue"
+    ]
+  }
+  },
+  {
+    "user": {
+    "username": "george",
+    "password": "9fd8de5fc2a7c2c0d469b2fff1afde4e5def37ba",
+    "commands": [
+      "print",
+      "queue"
+    ]
+  }
+  },
+  {
+    "user": {
+    "username": "erica",
+    "password": "b34dcff65a61fa6f44bf3335bcddbdc3b76b7e78",
+    "commands": [
+      "print",
+      "queue"
+    ]
+  }
+  },
+  {
+    "user": {
+    "username": "david",
+    "password": "aa743a0aaec8f7d7a1f01442503957f4d7a2d634",
+    "commands": [
+      "print",
+      "queue"
+    ]
+  }
+  }
+]
