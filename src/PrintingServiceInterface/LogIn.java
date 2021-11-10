@@ -24,53 +24,52 @@ public class LogIn extends UnicastRemoteObject implements LogInInterface {
     public LogIn() throws RemoteException {
         super();
         System.out.println("LogIn Service started");
-        initUSer();
+//        initUSer();
     }
 
     @Override
     public boolean LogIn(String name, String password) throws NoSuchAlgorithmException, IOException {
-        initUSer();
+//        initUSer();
         System.out.println("User " + name + " is trying to log in!");
         String response = userSearch(name, password);
+        System.out.println(response);
         if (response.matches("LOGIN_SUCCESSFUL"))
             return true;
-        System.out.println(response);
         return false;
     }
 
     private String userSearch(String username, String password) throws NoSuchAlgorithmException, IOException {
         String response = "";
-        Set set = Users.entrySet();
-        Iterator itr = set.iterator();
+//        Set set = Users.entrySet();
+//        Iterator itr = set.iterator();
         String shapass = sha1(password);
-        boolean LoggedIn = false;
-        while (itr.hasNext()) {
-            response = "";
-            Map.Entry entry = (Map.Entry) itr.next();
-            String user = entry.getKey().toString();
-            String pass = entry.getValue().toString();
-            if (username.equals(user)) {
-                LoggedIn = true;
-                if (shapass.equals(pass)) {
-                    response = "LOGIN_SUCCESSFUL";
-                } else {
-                    response = "PASSWORD_INCORRECT";
-                }
-                break;
+//        boolean LoggedIn = false;
+//        while (itr.hasNext()) {
+//            response = "";
+//            Map.Entry entry = (Map.Entry) itr.next();
+//            String user = entry.getKey().toString();
+//            String pass = entry.getValue().toString();
+            if (shapass.equals(dbase.getPassword(username))) {
+                response = "LOGIN_SUCCESSFUL";
             }
-        }
-        if (!LoggedIn) {
-            response = "USER_DOES_NOT_EXISTS";
-        }
-
+            else
+            {
+                response = "PASSWORD_INCORRECT";
+            }
+//                break;
+//            }
+//        }
+//        if (!LoggedIn) {
+//            response = "USER_DOES_NOT_EXISTS";
+//        }
         return response;
     }
 
-    private void initUSer() {
-        for (Users user : dbase.getUserList()) {
-            Users.put(user.getUsername(), user.getPassword());
-        }
-    }
+//    private void initUSer() {
+//        for (Users user : dbase.getUserList()) {
+//            Users.put(user.getUsername(), user.getPassword());
+//        }
+//    }
 
     static String sha1(String input) throws NoSuchAlgorithmException {
         MessageDigest mDigest = MessageDigest.getInstance("SHA1");

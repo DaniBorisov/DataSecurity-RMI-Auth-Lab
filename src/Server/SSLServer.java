@@ -12,7 +12,7 @@ public class SSLServer extends PrintingService  {
     private static int Port = 5098;
     private static int SSlSocketPort = 5051;
 
-    protected SSLServer() throws RemoteException {
+    public SSLServer() throws RemoteException {
         super();
     }
 
@@ -29,14 +29,6 @@ public class SSLServer extends PrintingService  {
             System.out.println("Server e" + e.toString());
             e.printStackTrace();
         }
-    }
-
-
-
-
-    private void StartPrintingService(Registry registry) throws RemoteException {
-        PrintingService printService = new PrintingService();
-        registry.rebind("service",printService);
     }
 }
 

@@ -23,6 +23,7 @@ public class Printer {
 
     public List<Job> getJobsInQueue()
     {
+        printJob();
         List<Job> list = new ArrayList<>(q);
         return list;
     }
@@ -30,11 +31,13 @@ public class Printer {
 
     public void PutJobInPrinter(Job job)
     {
+        printJob();
         q.add(job);
     }
 
     public void removeJobInPrinter(Job job)
     {
+        printJob();
         q.remove(job);
     }
 
@@ -48,7 +51,6 @@ public class Printer {
             {
                 removeJobInPrinter(j);
                 PutJobInPrinter(j);
-
             }
         }
     }
