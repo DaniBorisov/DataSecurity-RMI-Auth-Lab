@@ -1,6 +1,14 @@
 package Database;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Database {
     private final ArrayList<String> userCommnads = new ArrayList<>();
@@ -39,4 +47,138 @@ public class Database {
         System.out.println("User: " + username + " tried using unathorised command: " + command);
         return false;
     }
+
+    public boolean checkCommandsRB(String username,String command)
+    {
+        commandsFromRBFile(roleFromRBFile(username));
+        for (String s : userCommnads) {
+            if (s.matches(command)) {
+                userCommnads.clear();
+                return true;
+            }
+        }
+        userCommnads.clear();
+        System.out.println("User: " + username + " tried using unathorised command: " + command);
+        return false;
+    }
+
+//    #################################################################
+//                  Get password from Access Control List
+
+    private String getPasswordFromFile(String inputUsername) {
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("src/Database/UserList.json")) {
+            Object obj = jsonParser.parse(reader);
+            JSONArray userList = (JSONArray) obj;
+
+            userList.forEach(
+                    usr -> passwordParser((JSONObject) usr, inputUsername));
+
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+        return passwordFile;
+    }
+
+    private void  passwordParser(JSONObject user, String inputUsername) {
+        JSONObject userObject = (JSONObject) user.get("user");
+        String username = (String) userObject.get("username");
+        if (username.equals(inputUsername)) {
+            passwordFile = (String) userObject.get("password");
+        }
+    }
+
+//    #################################################################
+//              Get Commands from Access Control List
+
+    private void commandsFromFile(String inputUsername) {
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("src/Database/UserList.json"))
+        {
+            Object obj = jsonParser.parse(reader);
+            JSONArray userList = (JSONArray) obj;
+
+            userList.forEach(
+                    usr -> commandsParser((JSONObject) usr, inputUsername));
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void  commandsParser(JSONObject user, String inputUsername) {
+        JSONObject userObject = (JSONObject) user.get("user");
+        String username = (String) userObject.get("username");
+
+        if (username.equals(inputUsername)) {
+            JSONArray commands = (JSONArray) userObject.get("commands");
+            Iterator<String> iterator = commands.iterator();
+            while (iterator.hasNext()) {
+                userCommnads.add(iterator.next());
+            }
+        }
+    }
+
+
+//    #################################################################
+//              Get Commands from Role Base Access Control files
+
+    private String roleFromRBFile(String inputUsername) {
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("src/Database/UserRoles.json"))
+        {
+            Object obj = jsonParser.parse(reader);
+            JSONArray userList = (JSONArray) obj;
+            userList.forEach(
+                    usr -> roleParserRB((JSONObject) usr, inputUsername));
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return RoleFromRBfile;
+    }
+
+    private void  roleParserRB(JSONObject user, String inputUsername) {
+        JSONObject userObject = (JSONObject) user.get("user");
+        String username = (String) userObject.get("username");
+        if (username.equals(inputUsername)) {
+            RoleFromRBfile = (String) userObject.get("role");
+        }
+    }
+
+
+
+    private void commandsFromRBFile(String role) {
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("src/Database/PermissionRoles.json"))
+        {
+            Object obj = jsonParser.parse(reader);
+            JSONArray roleList = (JSONArray) obj;
+
+            roleList.forEach(
+                    rl -> commandsParserRB((JSONObject) rl, role));
+
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void  commandsParserRB(JSONObject rl, String role) {
+        JSONObject roleObject = (JSONObject) rl.get("role");
+        String roleName = (String) roleObject.get("roleName");
+
+        if (roleName.equals(role)) {
+            JSONArray commands = (JSONArray) roleObject.get("commands");
+            for (String command : (Iterable<String>) commands) {
+                userCommnads.add(command);
+            }
+        }
+    }
+
+
+
 }
+
+
