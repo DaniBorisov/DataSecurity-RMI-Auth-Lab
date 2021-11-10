@@ -41,7 +41,6 @@ public class Printer {
         q.remove(job);
     }
 
-
     public void moveToTop(int job)
     {
         List<Job> jobs = getJobsInQueue();
@@ -60,4 +59,15 @@ public class Printer {
         q.clear();
     }
 
+    private void printJob()
+    {
+        for (Job j : q)
+        {
+            if (j.getTimeToLive() < System.currentTimeMillis() )
+            {
+                System.out.println("File: " + j.getFileName() + "with id: "  + j.getID() + " is printed");
+                q.remove(j);
+            }
+        }
+    }
 }
