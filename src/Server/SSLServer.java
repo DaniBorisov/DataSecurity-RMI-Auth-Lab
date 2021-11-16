@@ -1,13 +1,14 @@
 package Server;
 
 import PrintingServiceInterface.LogIn;
-import PrintingServiceInterface.PrintingService;
+import PrintingServiceInterface.PrintingServiceACL;
+import PrintingServiceInterface.PrintingServiceRBAC;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class SSLServer extends PrintingService  {
+public class SSLServer extends PrintingServiceACL {
 
     private static int Port = 5098;
     private static int SSlSocketPort = 5051;
@@ -23,8 +24,10 @@ public class SSLServer extends PrintingService  {
             LogIn login = new LogIn();
             registry.rebind("logIn",login);
             System.err.println("Server ready");
-            PrintingService printService = new PrintingService();
-            registry.rebind("service",printService);
+            PrintingServiceRBAC printServiceRBAC = new PrintingServiceRBAC();
+            registry.rebind("RBAC",printServiceRBAC);
+            PrintingServiceACL printServiceACL = new PrintingServiceACL();
+            registry.rebind("ACL",printServiceACL);
         } catch (Exception e){
             System.out.println("Server e" + e.toString());
             e.printStackTrace();

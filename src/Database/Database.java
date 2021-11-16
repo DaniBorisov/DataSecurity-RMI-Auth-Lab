@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Database {
+
     private final ArrayList<String> userCommnads = new ArrayList<>();
     private String passwordFile = "";
+    private String saltFile = "";
     private String RoleFromRBfile = "";
 
     Printer printer1 = new Printer("p1");
@@ -32,6 +34,12 @@ public class Database {
     {
         passwordFile = "";
         return getPasswordFromFile(username);
+    }
+
+    public String getSalt(String username)
+    {
+        saltFile = "";
+        return getSaltFromFile(username);
     }
 
     public boolean checkCommands(String username, String command)
@@ -84,7 +92,33 @@ public class Database {
         JSONObject userObject = (JSONObject) user.get("user");
         String username = (String) userObject.get("username");
         if (username.equals(inputUsername)) {
-            passwordFile = (String) userObject.get("password");
+            passwordFile = (String) userObject.get("hash");
+        }
+    }
+
+// #################################################################
+//                  Get salt from Access Control List
+
+    private String getSaltFromFile(String inputUsername) {
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("src/Database/UserList.json")) {
+            Object obj = jsonParser.parse(reader);
+            JSONArray userList = (JSONArray) obj;
+
+            userList.forEach(
+                    usr -> saltParser((JSONObject) usr, inputUsername));
+
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+        return saltFile;
+    }
+
+    private void  saltParser(JSONObject user, String inputUsername) {
+        JSONObject userObject = (JSONObject) user.get("user");
+        String username = (String) userObject.get("username");
+        if (username.equals(inputUsername)) {
+            saltFile = (String) userObject.get("salt");
         }
     }
 

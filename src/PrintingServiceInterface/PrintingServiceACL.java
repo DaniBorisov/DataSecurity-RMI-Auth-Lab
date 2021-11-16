@@ -8,13 +8,14 @@ import java.util.*;
 
 
 
-public class PrintingService extends UnicastRemoteObject implements PrintingInterface {
+public class PrintingServiceACL extends UnicastRemoteObject implements PrintingInterface {
+
     private final List<Printer> printers = new ArrayList<>();
     private final Database dbase = new Database();
     int jobCounter = 1;
     boolean isOnline = true;
 
-    public PrintingService() throws RemoteException {
+    public PrintingServiceACL() throws RemoteException {
         super();
         System.out.println("Printing Server started");
         initPrinter();
@@ -22,7 +23,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String print(String filename, String printer,String username) throws RemoteException {
-        if(dbase.checkCommandsRB(username, "print") && isOnline)
+        if(dbase.checkCommands(username, "print") && isOnline)
         {
             Job job = new Job(filename, username, jobCounter);
             for (Printer p : printers) {
@@ -43,7 +44,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String queue(String printer,String username)  throws RemoteException {
-        if(dbase.checkCommandsRB(username, "queue") && isOnline) {
+        if(dbase.checkCommands(username, "queue") && isOnline) {
             List<Job> jobs = new ArrayList<>();
             for (Printer p : printers) {
                 if (printer.matches(p.getPrinterName())) {
@@ -70,7 +71,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String topQueue(String printer, int job,String username)  throws RemoteException {
-        if(dbase.checkCommandsRB(username, "topQueue") && isOnline) {
+        if(dbase.checkCommands(username, "topQueue") && isOnline) {
             for (Printer p : printers) {
                 if (printer.matches(p.getPrinterName())) {
                     p.moveToTop(job);
@@ -87,7 +88,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String start(String username) throws RemoteException{
-        if(!dbase.checkCommandsRB(username, "start") && isOnline) {
+        if(!dbase.checkCommands(username, "start") && isOnline) {
             return "Permission Denied";
         }  else if (!isOnline){
             isOnline = true;
@@ -100,7 +101,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String stop(String username) throws RemoteException {
-        if(dbase.checkCommandsRB(username, "stop") && isOnline) {
+        if(dbase.checkCommands(username, "stop") && isOnline) {
             System.err.println("Stopping Print Server");
             isOnline = false;
             return  "Stopping the Print server";
@@ -113,7 +114,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String restart(String username) throws RemoteException, InterruptedException {
-        if(dbase.checkCommandsRB(username, "restart") && isOnline) {
+        if(dbase.checkCommands(username, "restart") && isOnline) {
             for (Printer p : printers) {
                 p.clearQueue();
             }
@@ -130,7 +131,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String status(String printer, String username) throws RemoteException {
-        if(dbase.checkCommandsRB(username, "status") && isOnline) {
+        if(dbase.checkCommands(username, "status") && isOnline) {
             return  "Status of printer " + printer;
         }else if (!isOnline){
             return " Printing server offline";
@@ -141,7 +142,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String readConfig(String parameter, String username) throws RemoteException {
-        if(dbase.checkCommandsRB(username, "readConfig") && isOnline) {
+        if(dbase.checkCommands(username, "readConfig") && isOnline) {
             return  "Reading config of " +"\0"+ parameter;
         }else if (!isOnline){
             return " Printing server offline";
@@ -152,7 +153,7 @@ public class PrintingService extends UnicastRemoteObject implements PrintingInte
 
     @Override
     public String setConfig(String parameter, String value, String username)   throws RemoteException{
-        if(dbase.checkCommandsRB(username, "setConfig") && isOnline) {
+        if(dbase.checkCommands(username, "setConfig") && isOnline) {
             return  "the following parameter " + parameter +" is set to " + value;
         }else if (!isOnline){
             return " Printing server offline";

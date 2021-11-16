@@ -17,11 +17,27 @@ public class SSLClient {
 
     public static void main(String[] args) {
         System.err.println("Client started");
+        String method = "";
+        
+        boolean correct = false;
+        while(!correct) {
+            System.out.print("Choose which Access control method you want. RBAC or ACL ");
+            method = scanner.nextLine();  // Read user input
+            if(method.equals("RBAC") || method.equals("ACL") )
+            {
+                System.out.println("You are using " + method + " for access control :)");
+                correct = true;;
+            }
+            else
+            {
+                System.out.println("Maybe you made a type ? hmmm... beep boop");
+            }
+        }
         try
         {
             Registry registry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), Port);
             LogInInterface logIn = (LogInInterface) registry.lookup("logIn");
-            PrintingInterface service = (PrintingInterface) registry.lookup("service");
+            PrintingInterface service = (PrintingInterface) registry.lookup(method);
             boolean loggedIn = false;
             while (!loggedIn)
             {
