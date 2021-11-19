@@ -39,7 +39,6 @@ public class LogIn extends UnicastRemoteObject implements LogInInterface {
     private String userSearch(String username, String password) throws NoSuchAlgorithmException, IOException {
         String response = "";
 
-//        String shapass = sha1(password);
         String salt = dbase.getSalt(username);
         String passPlusSalt = salt.concat(password);
         String encPass = sha1(passPlusSalt);
