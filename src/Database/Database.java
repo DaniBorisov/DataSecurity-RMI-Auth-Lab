@@ -101,7 +101,7 @@ public class Database {
 
     private String getSaltFromFile(String inputUsername) {
         JSONParser jsonParser = new JSONParser();
-        try (FileReader reader = new FileReader("src/Database/UserList.json")) {
+        try (FileReader reader = new FileReader("src/Database/UserListChange.json")) {
             Object obj = jsonParser.parse(reader);
             JSONArray userList = (JSONArray) obj;
 
@@ -159,7 +159,7 @@ public class Database {
 
     private String roleFromRBFile(String inputUsername) {
         JSONParser jsonParser = new JSONParser();
-        try (FileReader reader = new FileReader("src/Database/UserRoles.json"))
+        try (FileReader reader = new FileReader("src/Database/UserRolesChange.json"))
         {
             Object obj = jsonParser.parse(reader);
             JSONArray userList = (JSONArray) obj;
